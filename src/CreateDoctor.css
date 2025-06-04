@@ -1,0 +1,132 @@
+/* Styles for the Create Doctor page */
+
+/* Ensure same distance from edges on both sides */
+.create-doctor-page.fgp-page {
+  padding: 0 3rem; /* Add consistent padding to the entire page container */
+  box-sizing: border-box;
+}
+.btn {
+  background-color: #672bb5 !important;
+}
+/* Header styles */
+.create-doctor-header {
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+.dash.active {
+  background-color: #672bb5 !important;
+}
+.create-doctor-back-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #1e1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.create-doctor-back-button img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.create-doctor-header-title {
+  margin: 0 0 0 1rem;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+/* Make the image panel slightly wider */
+.create-doctor-page .image-panel {
+  flex: 6.5; /* Slightly wider than the default 6 */
+  padding: 1rem 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align to the start (left) instead of center */
+  background-color: transparent; /* Removed background color */
+  position: relative; /* For positioning of the header */
+}
+
+.create-doctor-page .image-panel img {
+  max-width: 70%;
+  max-height: 95vh;
+  object-fit: contain;
+  border-radius: 1rem;
+}
+
+/* Adjust the form panel to complement the wider image panel */
+.create-doctor-page .form-panel {
+  flex: 5.5; /* Complementary to the 6.5 of the image panel */
+}
+
+/* Reduce date margin to make more space for form */
+.create-doctor-page .form-date {
+  margin-bottom: 2rem; /* Further reduced from 3rem */
+}
+
+/* Input styling */
+.create-doctor-page .input-group {
+  margin-bottom: 0.5rem; /* Further reduced from 0.75rem */
+}
+
+/* Additional spacing adjustments for a more compact form */
+.create-doctor-page h2 {
+  margin-bottom: 0.5rem; /* Reduce space after heading */
+  font-size: 1.5rem; /* Reduced heading size */
+}
+
+.create-doctor-page .subheading {
+  margin-bottom: 0.75rem; /* Further reduced from 1rem */
+  font-size: 0.85rem; /* Make subheading smaller */
+  line-height: 1.3; /* Even tighter line height */
+}
+
+/* Button spacing */
+.create-doctor-page .btn {
+  background-color: #495057;
+  color: white;
+  margin-top: 0.75rem; /* Increased slightly for better spacing after more compact inputs */
+  margin-bottom: 0.75rem; /* Space between button and dashes */
+}
+
+.create-doctor-page .btn:hover {
+  background-color: #6c757d;
+}
+
+/* Carousel dashes adjustment */
+.create-doctor-page .carousel-dashes {
+  margin-top: 1rem; /* Reduced from the default in FogP.css */
+}
+
+.create-doctor-page .dash {
+  margin-top: 0; /* Remove the top margin from dashes */
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .create-doctor-page.fgp-page {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .create-doctor-page .form-panel {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-doctor-page .image-panel {
+    display: none; /* Hide image on smaller screens */
+  }
+}

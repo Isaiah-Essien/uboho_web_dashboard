@@ -1,0 +1,81 @@
+/* components/StatCard.css */
+
+.stat-card {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-family: 'Gilmer', sans-serif !important;
+  }
+  
+  .card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .percentage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    color: #4caf50;
+    font-size: 0.9rem;
+  }
+  
+  .percentage-title {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  
+  .percentage-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  
+  .vector-icon {
+    width: 10px;
+    height: 10px;
+    margin-left: 0.3rem;
+  }
+  
+  .card-icon .icon-circle {
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .card-icon-img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .card-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    color: #fff;
+  }
+  
+  @media (max-width: 768px) {
+    .card-value {
+      font-size: 1.5rem;
+    }
+  
+    .percentage-title {
+      font-size: 0.9rem;
+    }
+  }
+  

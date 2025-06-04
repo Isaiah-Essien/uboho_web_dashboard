@@ -1,0 +1,433 @@
+/* Container holds sidebar and content */
+.overview-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #111111 !important;
+    font-family: 'Gilmer', sans-serif !important;
+}
+
+/* Main content section - Updated for responsive sidebar */
+.overview-content {
+    margin-left: 240px; /* Matches sidebar width */
+    padding: 1rem;
+    padding-top: 2rem;
+    width: calc(100% - 240px); /* Account for sidebar width */
+    box-sizing: border-box;
+    color: #fff;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* Header row for Overview title and search */
+.overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Header left section for back button and title */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Search bar container */
+.searchbar {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 6px 12px;
+    background-color: #1e1e1e;
+    width: 330px; /* Fixed width for desktop */
+    transition: all 0.3s ease;
+}
+
+/* Responsive layout for header */
+@media (min-width: 769px) {
+    .searchbar {
+        width: 330px; /* Ensure fixed width on desktop */
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+    
+    .header-actions {
+        gap: 1.5rem; /* Maintain spacing between elements */
+    }
+}
+
+@media (max-width: 768px) {
+    .searchbar {
+        width: 100%; /* Full width on mobile */
+        max-width: 100% !important;
+    }
+    
+    .header-left {
+        justify-content: flex-start;
+    }
+}
+
+/* Expand searchbar on focus */
+.searchbar:focus-within {
+    border-color: #4caf50;
+}
+
+/* Search input field */
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 4px;
+    min-width: 0;
+}
+
+/* Search icon */
+.search-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    filter: brightness(0) invert(1); /* ensures visibility in dark mode */
+}
+
+/* Cards grid layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Each card */
+.stat-card {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Card upper row */
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Text info */
+.card-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.percentage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    color: #4caf50;
+    font-size: 0.9rem;
+}
+
+.percentage-title {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.percentage-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Right-side icon */
+.card-icon .icon-circle {
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for the image icon */
+.card-icon-img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Value row */
+.card-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    color: #fff;
+}
+
+/* Style for the vector image inside icons */
+.vector-icon {
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: 0.3rem;
+}
+
+/* Responsive adjustments for sidebar collapse */
+@media (max-width: 768px) {
+    .overview-content {
+        margin-left: 60px; /* Matches collapsed sidebar width */
+        width: calc(100% - 60px); /* Account for collapsed sidebar */
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .card-value {
+        font-size: 1.5rem;
+    }
+
+    .percentage-title {
+        font-size: 0.9rem;
+    }
+
+    .searchbar {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Container for the right side of the header (search + notif) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+/* Notification icon circle */
+.notif-icon-wrapper {
+    background-color: #1e1e1e;
+    border-radius: 50%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notif-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+}
+
+/* Title */
+.overview-title {
+    text-align: left !important;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Responsive layout for header */
+@media (max-width: 768px) {
+  .overview-header {
+    flex-direction: column;
+    align-items: stretch; /* Make children take full width */
+  }
+
+  .header-left {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    justify-content: flex-start; /* Ensure items align left */
+  }
+
+  .overview-title {
+    text-align: left !important;
+    width: auto;
+    margin-bottom: 0;
+    margin-left: 0 !important;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .searchbar {
+    flex: 1;
+    max-width: 100%;
+  }
+}
+
+/* Extra small devices - ensure alignment at smallest breakpoints */
+@media (max-width: 480px) {
+  .header-left,
+  .back-and-title {
+    display: flex !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    width: auto !important; /* Change from 100% to auto */
+    float: left !important; /* Add float to force alignment */
+  }
+  
+  .overview-title, 
+  .messages-title,
+  h1, h2, h3 {
+    text-align: left !important;
+    margin-left: 0 !important;
+    display: inline-block !important; /* Change to inline-block */
+  }
+  
+  .back-button,
+  .back-btn-round {
+    margin-right: 8px !important;
+    float: left !important; /* Add float to force alignment */
+  }
+  
+  /* Add more explicit override to header elements */
+  .overview-header {
+    display: block !important; /* Change to block for better control */
+    text-align: left !important;
+  }
+  
+  /* Clear the float after elements */
+  .overview-header::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+.map-section {
+    margin-top: 20px;
+    position: relative;
+    height: 350px; /* Limit height to 350px */
+    border-radius: 15px; /* Rounded borders */
+    overflow: hidden; /* Ensure that the content within the map doesn't overflow */
+}
+
+/* New separate legend section */
+.map-legend-section {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    position: static;
+    background-color: transparent;
+}
+
+/* New separate map container section */
+.map-container-section {
+    position: relative;
+    height: 400px; /* Optimal height for map interaction */
+    border-radius: 15px; /* Rounded borders */
+    overflow: hidden; /* Ensure that the content within the map doesn't overflow */
+    background-color: #1e1e1e;
+    isolation: isolate; /* Create new stacking context */
+}
+
+.map-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+/* More specific selector to override any other .leaflet-container styles */
+.map-section .leaflet-container,
+.overview-map.leaflet-container {
+    z-index: 0;
+    height: 100%; /* Ensure the map takes the full height of the container */
+    width: 100%; /* Ensure full width */
+    border-radius: 12px !important; /* Explicit border radius for the overview map */
+    padding-right: 0 !important; /* Remove any padding */
+    margin-left: 0 !important; /* Remove any margin */
+    background-color: #1e1e1e; /* Consistent background */
+}
+
+.map-label-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 10px;
+}
+
+.map-seizure {
+    color: #ff4444;
+    font-size: 0.9rem;
+    font-weight: 500;
+    position: relative;
+    z-index: 1000;
+}
+
+.map-no-seizure {
+    color: #4caf50;
+    font-size: 0.9rem;
+    font-weight: 500;
+    position: relative;
+    z-index: 1000;
+}
+
+.seizure-dash {
+    color: #ff4444;
+    font-weight: bold;
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 1000;
+}
+
+.no-seizure-dash {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 1000;
+}
+
+.overview-map-container {
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Custom marker styles */
+.custom-marker {
+    background: transparent;
+    border: none;
+}
+
+/* Leaflet popup customization for dark theme */
+.leaflet-popup-content-wrapper {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-popup-tip {
+    background-color: #fff;
+}
+
+/* Ensure popups don't interfere with map interactions */
+.custom-popup .leaflet-popup-content-wrapper {
+    pointer-events: auto;
+}
+
+.custom-popup .leaflet-popup-tip {
+    pointer-events: none;
+}

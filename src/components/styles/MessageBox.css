@@ -1,0 +1,21 @@
+.message-box {
+  border: 1px solid #ffffff7e;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  background-color: transparent;
+  color: white;
+  text-align: left;
+}
+
+.message-title {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.message-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}

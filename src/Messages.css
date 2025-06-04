@@ -1,0 +1,249 @@
+body {
+    font-family: 'Gilmer', sans-serif;
+  }
+  
+  .header-with-back {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .back-and-title {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* spacing between arrow and title */
+  }
+  
+  .back-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .back-button img {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+  
+  .messages-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1; /* ensures vertical alignment */
+  }
+  
+  .filter-and-new-chat-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .filter-buttons-container {
+    display: inline-flex;  /* Ensure the container only takes the space needed for buttons */
+    justify-content: center;
+    gap: 3px;
+    background-color: #1e1e1e; /* Dark gray background */
+    padding: 4px; /* Padding set to 4px on all sides */
+    border-radius: 8px; /* Optional: for rounded corners */
+  }
+  
+  .filter-button {
+    background: none;
+    color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: background-color 0.3s ease;
+    border-radius: 4px; /* Optional: for rounded corners */
+    font-weight: 300; /* Slightly bolder text */
+  }
+  
+  .filter-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .filter-button.active {
+    background-color: #9b4dca; /* Purple background for active button */
+    color: white;
+  }
+  
+  /* New Chat Button Styling */
+  .new-chat-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.61); /* Thin border */
+    border-radius: 8px; /* Slight curve to the corners */
+    color: white;
+    font-size: 14px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 300; /* Slightly bolder text */
+    height: 40px;
+  }
+  
+  .new-chat-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .new-chat-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
+/* Chat List Container */
+.overview-content .chat-list-container {
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+  
+  .overview-content .chat-list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #dddddd60;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
+    max-width: 100%; /* Prevent expanding beyond container */
+  }
+  
+  .chat-profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .chat-profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+  
+  .chat-details {
+    display: flex;
+    align-items: center;
+  }
+  
+  .chat-name {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .chat-user-id {
+    font-size: 12px;
+    color: #888;
+    margin-left: 6px; /* Space between dot and user ID */
+  }
+  
+  .chat-details span {
+    margin: 0 6px; /* Space around the dot */
+    color: #888; /* Color of the dot */
+  }
+  
+  .view-message-button {
+    background-color: #9b4dca; /* Purple background */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    font-weight: 300; /* Slightly bolder text */
+  }
+  
+  .view-message-button:hover {
+    background-color: #7a3da1; /* Darker purple on hover */
+  }
+  
+  /* New Chat Button Styling */
+.new-chat-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.61); /* Thin border */
+    border-radius: 8px; /* Slight curve to the corners */
+    color: white;
+    font-size: 14px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 300; /* Slightly bolder text */
+    height: 40px;
+  }
+  
+  .new-chat-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .new-chat-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+  
+  /* Mobile responsiveness: Hide "Start New Chat" and show "New Chat" text */
+  @media only screen and (max-width: 600px) {
+    .new-chat-button .new-chat-text {
+      display: none; /* Hide "Start New Chat" on mobile */
+    }
+  
+    /* Show "New Chat" text instead on smaller screens */
+    .new-chat-button .new-chat-text-mobile {
+      display: inline; /* Show "New Chat" text */
+    }
+  }
+  
+  /* Ensure the "new-chat-text" is visible only on larger screens */
+  @media only screen and (min-width: 601px) {
+    .new-chat-button .new-chat-text {
+      display: inline; /* Show "Start New Chat" on larger screens */
+    }
+  
+    .new-chat-button .new-chat-text-mobile {
+      display: none; /* Hide "New Chat" text on larger screens */
+    }
+  }
+  
+  /* Default styles */
+.chat-profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  /* Media query for mobile screens */
+  @media (max-width: 768px) {
+    /* Hide profile picture on mobile */
+    .chat-profile-pic {
+      display: none;
+    }
+  
+    /* Show shorter text for mobile screens */
+    .new-chat-text {
+      display: none;
+    }
+  
+    .new-chat-text-mobile {
+      display: inline-block; /* Shows the text "New Chat" on mobile screens */
+    }
+  }
+  

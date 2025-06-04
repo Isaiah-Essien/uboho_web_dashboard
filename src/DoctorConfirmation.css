@@ -1,0 +1,213 @@
+/* Styles for the Doctor Confirmation page */
+
+/* Ensure same distance from edges on both sides */
+.doctor-confirmation-page.fgp-page {
+  padding: 0 3rem; /* Add consistent padding to the entire page container */
+  box-sizing: border-box;
+}
+
+/* Header styles */
+.doctor-confirmation-page .change-password-header {
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Make the image panel slightly wider */
+.doctor-confirmation-page .image-panel {
+  flex: 6.5; /* Slightly wider than the default 6 */
+  padding: 1rem 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align to the start (left) instead of center */
+  background-color: transparent; /* Removed background color */
+  position: relative; /* For positioning of the header */
+}
+
+.doctor-confirmation-page .image-panel img {
+  max-width: 70%;
+  max-height: 95vh;
+  object-fit: contain;
+  border-radius: 1rem;
+}
+
+/* Adjust the form panel to complement the wider image panel */
+.doctor-confirmation-page .form-panel {
+  flex: 5.5; /* Complementary to the 6.5 of the image panel */
+}
+
+/* Form container */
+.doctor-confirmation-page .form-container {
+  max-width: 450px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1rem;
+  position: relative; /* Add position relative for absolute positioning of dashes */
+  min-height: 95vh; /* Match the height of the image panel */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Date Formatting */
+.doctor-confirmation-page .form-date {
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-bottom: 5rem; /* Reduced from 6.25rem */
+}
+
+/* Confirmation elements */
+.doctor-confirmation-page .confirmation-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  background-color: transparent; /* Removed background */
+  padding-bottom: 3rem; /* Add space at the bottom to not overlap with dashes */
+}
+
+.doctor-confirmation-page .confirmation-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+.doctor-confirmation-page .confirmation-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.doctor-confirmation-page .confirmation-subtext {
+  font-size: 1rem;
+  color: #aaa;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+.doctor-confirmation-page .btn {
+  background-color: #7e5cef;
+  color: white;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-bottom: 1rem; /* Small space before dashes */
+}
+
+.doctor-confirmation-page .btn:hover {
+  background-color: #6a4ccd;
+}
+
+/* Carousel Dashes */
+.doctor-confirmation-page .carousel-dashes {
+  display: flex;
+  justify-content: flex-start; /* Align left like other form content */
+  gap: 0.5rem;
+  width: 100%;
+  position: absolute; /* Position absolutely within the form container */
+  bottom: 2rem; /* Fixed position from the bottom */
+  left: 1rem; /* Keep aligned with the container's padding */
+}
+
+.doctor-confirmation-page .dash {
+  width: 50px;
+  height: 5px;
+  background-color: #444;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  margin-top: 0;
+}
+
+.doctor-confirmation-page .dash.active {
+  background-color: #7e5cef; /* Match button color */
+}
+
+/* Ensure the form panel can maintain the fixed position of the dashes */
+.doctor-confirmation-page .form-panel {
+  flex: 5.5; /* Complementary to the 6.5 of the image panel */
+  position: relative; /* Ensure positioned elements inside work properly */
+  min-height: 95vh; /* Match the height of the image */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Email notification styles */
+.email-notification {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #0ea5e9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.email-info h3 {
+  color: #0369a1;
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.email-info p {
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.next-steps h4 {
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.next-steps ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #475569;
+}
+
+.next-steps li {
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 992px) {
+  .doctor-confirmation-page.fgp-page {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .doctor-confirmation-page .form-panel {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .doctor-confirmation-page .image-panel {
+    display: none; /* Hide image on smaller screens */
+  }
+  
+  .doctor-confirmation-page .confirmation-content {
+    padding: 1rem;
+  }
+  
+  .email-notification {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+}

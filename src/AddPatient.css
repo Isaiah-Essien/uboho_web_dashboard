@@ -1,0 +1,113 @@
+body {
+  font-family: 'Gilmer', sans-serif;
+}
+
+.phone-input {
+  margin-top: 1rem;
+}
+
+.phone-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #1e1e1e;
+  border: 1px solid #e0e0e05b;
+  border-radius: 6px;
+  color: #e0e0e05b;
+  margin-bottom: 15px;
+}
+
+.flag-select {
+  display: flex;
+  align-items: center;
+  margin-right: 0.75rem;
+  border-right: 1px solid #444;
+  padding-right: 0.75rem;
+}
+
+.flag-select img {
+  width: 20px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.country-code {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.452);
+  font-size: 1rem;
+  appearance: none;
+  padding-right: 16px;
+
+}
+
+.country-code:focus {
+  outline: none;
+}
+
+.phone-number {
+  flex: 1;
+  background: transparent;
+  border-left: 1px solid rgba(255, 255, 255, 0.322) !important ;
+  border: none;
+  color: rgba(255, 255, 255, 0.322) !important;
+  font-size: 1rem;
+  border-radius: 0px;
+}
+
+.phone-number::placeholder {
+  color: #aaaaaab2;
+}
+
+.phone-number:focus {
+  outline: none;
+}
+
+.arrow-right {
+  margin-left: 8px;
+  vertical-align: middle;
+
+}
+
+.form-navigation.full-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+/* Back button (text only) */
+.back-btn-text {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+}
+
+/* Arrow icons for both buttons */
+.arrow-icon,
+.arrow-right {
+  width: 16px;
+  height: 16px;
+}
+
+/* Next / Submit button */
+.next-btn {
+
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+

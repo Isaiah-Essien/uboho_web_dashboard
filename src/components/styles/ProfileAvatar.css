@@ -1,0 +1,71 @@
+/* ProfileAvatar.css */
+.profile-avatar-wrapper {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.profile-avatar-image {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: border-color 0.2s ease;
+}
+
+.profile-avatar-image:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.profile-avatar-placeholder {
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-family: 'Gilmer', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-avatar-placeholder:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.profile-avatar-placeholder:active {
+  transform: scale(0.95);
+}
+
+/* Clickable variants */
+.profile-avatar-wrapper[onclick],
+.profile-avatar-placeholder[onclick] {
+  cursor: pointer;
+}
+
+/* Size variants */
+.profile-avatar-small {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 13px !important;
+}
+
+.profile-avatar-medium {
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 16px !important;
+}
+
+.profile-avatar-large {
+  width: 60px !important;
+  height: 60px !important;
+  font-size: 24px !important;
+}
+
+.profile-avatar-xlarge {
+  width: 80px !important;
+  height: 80px !important;
+  font-size: 32px !important;
+}

@@ -1,0 +1,44 @@
+.raw-data-container {
+  padding: 24px;
+}
+
+.raw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.raw-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  flex-grow: 1;
+}
+
+
+.raw-actions-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.download-button {
+  background-color: #333;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.columns-button {
+  background-color: transparent;
+  border: 1px solid grey;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+

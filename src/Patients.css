@@ -1,0 +1,643 @@
+/* Layout: Buttons */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Buttons: Add & Filter */
+.add-patient-btn,
+.filter-columns-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: 'Gilmer', sans-serif;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.add-patient-btn {
+  background-color: #343a40; /* Change to dark gray */
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.add-patient-btn:hover {
+  background-color: #23272b; /* Darker gray on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.add-patient-btn img,
+.filter-columns-btn .filter-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.filter-columns-btn {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: inherit;
+}
+
+.filter-columns-btn:hover {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.filter-columns-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Patients Table */
+.patients-table {
+  margin-top: 20px;
+  overflow-x: auto;
+  font-weight: 300;
+}
+
+.patients-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.patients-table th,
+.patients-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #dddddd52;
+}
+
+.patients-table th {
+  background-color: #1e1e1e;
+  color: #fff;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.patients-table td {
+  font-family: 'Gilmer', sans-serif;
+  font-size: 14px;
+}
+
+.patients-table .patient-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Patient Avatar Placeholder */
+.patient-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Gilmer', sans-serif;
+}
+
+/* Hide avatar on small screens */
+@media (max-width: 768px) {
+  .patients-table th.avatar-column,
+  .patients-table td.avatar-column {
+    display: none;
+  }
+
+  .patients-table th,
+  .patients-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+/* Pagination */
+.pagination-bar {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pagination-btn.chevron {
+  background-color: #1e1e1e;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pagination-btn.chevron img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.pagination-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  flex: 1;
+}
+
+.pagination-page {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gilmer', sans-serif;
+  transition: background 0.2s;
+}
+
+.pagination-page.active {
+  background-color: #7e5cef;
+  color: #fff;
+}
+
+/* Pagination Responsiveness */
+@media (max-width: 768px) {
+  .pagination-page:nth-child(n+6):not(.active) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-page:not(.active):not(:first-child):not(:last-child) {
+    display: none;
+  }
+}
+
+/* Navigation Row */
+.row-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Back Button */
+.back-btn-round {
+  background-color: #1e1e1e;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.back-btn-round:hover {
+  background-color: #2a2a2a;
+}
+
+.back-btn-round img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Progress Dashes */
+.progress-dashes {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.progress-dash {
+  width: 117px;
+  height: 5px;
+  border-radius: 10px;
+  background: #ccc;
+  transition: background-color 0.3s;
+}
+
+.progress-dash.active {
+  background: #7e22ce;
+}
+
+/* Form Layout */
+.form-outer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.form-wrapper-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Form Fields */
+.form-content {
+  width: 100%;
+  min-height: 400px;
+}
+
+.form-title {
+  font-size: 18px;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+
+.form-description {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #cccccc4d;
+  border-radius: 6px;
+  background: #1E1E1E;
+  box-sizing: border-box;
+  color: #ffffff83;
+  font-weight: 400;
+}
+
+/* Phone Input Group */
+.phone-input {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.country-code {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+}
+
+.phone-number {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Form Navigation */
+.form-navigation {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+
+.nav-button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nav-button.back {
+  background-color: #ddd;
+}
+
+.nav-button.next {
+  background-color: #6A0DAD;
+  color: #fff;
+}
+
+.nav-button.submit {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #7e22ce;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Filter Container and Enhanced Button Styles */
+.filter-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Enhanced Button Styles */
+.add-patient-btn,
+.filter-columns-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: 'Gilmer', sans-serif;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.add-patient-btn {
+  background-color: #343a40; /* Change to dark gray */
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.add-patient-btn:hover {
+  background-color: #23272b; /* Darker gray on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.filter-columns-btn {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: inherit;
+}
+
+.filter-columns-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.filter-columns-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.add-patient-btn img,
+.filter-columns-btn .filter-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.filter-columns-btn:hover .filter-icon {
+  opacity: 1;
+}
+
+/* Filter Menu Dropdown */
+.filter-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 9999;
+  min-width: 220px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: filterMenuSlide 0.2s ease-out;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes filterMenuSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.filter-menu-header {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-menu-header h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  font-family: 'Gilmer', sans-serif;
+}
+
+.filter-menu-options {
+  padding: 12px 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.filter-menu-options::-webkit-scrollbar {
+  width: 4px;
+}
+
+.filter-menu-options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-menu-options::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.filter-menu-options::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.filter-menu-options label {
+  display: flex;
+  align-items: center;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  position: relative;
+  font-family: 'Gilmer', sans-serif;
+  font-weight: 300;
+}
+
+.filter-menu-options label:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.filter-menu-options label:active {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.filter-menu-options input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  margin-right: 12px;
+    position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.filter-menu-options input[type="checkbox"]:hover {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.filter-menu-options input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-color: #2563eb;
+}
+
+.filter-menu-options input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.filter-menu-options input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+}
+
+/* Loading and Error States */
+.loading-message, .error-message {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 16px;
+  color: #888;
+  font-family: 'Gilmer', sans-serif;
+}
+
+.error-message {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.2);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+  font-family: 'Gilmer', sans-serif;
+}
+
+.empty-state p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.empty-state .add-patient-btn {
+  margin: 0 auto;
+  display: inline-flex;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-family: 'Gilmer', sans-serif;
+}
+
+.status-badge.active {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.status-badge.inactive {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.status-badge.pending {
+  background-color: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+/* Table Improvements */
+.patients-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.patients-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+/* Responsive Design for New Elements */
+@media (max-width: 768px) {
+  .status-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  
+  .empty-state p {
+    font-size: 16px;
+  }
+}

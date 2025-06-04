@@ -1,0 +1,18 @@
+.fgp-page .form-date {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-bottom: 6.25rem;
+  }
+
+.fgp-page .dash {
+    width: 50px;
+    height: 5px;
+    background-color: #444;
+    transition: background-color 0.3s ease;
+    margin-top: 9rem;
+    border-radius: 5px;
+  }
+  
+  .fgp-page .dash.active {
+    background-color: #800080;
+  }

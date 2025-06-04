@@ -1,0 +1,38 @@
+/* Surveillance Page Styles */
+.surveillance-container {
+    background-color: black;  /* Full black background */
+    color: white;  /* White text for contrast */
+    height: 100vh; /* Full screen height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .surveillance-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .surveillance-description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .icon-link {
+    display: inline-block;
+    margin-top: 2rem;
+  }
+  
+  .icon-image {
+    width: 80px; /* Size of the icon */
+    height: 80px;
+    transition: transform 0.3s ease;
+  }
+  
+  .icon-image:hover {
+    transform: scale(1.1); /* Slightly increase size on hover */
+  }
+  

@@ -1,0 +1,345 @@
+/* Change Avatar Page Styles */
+.avatar-change-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.avatar-change-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.back-and-title {
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 1rem;
+  padding: 0.5rem;
+}
+
+.back-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.avatar-title {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.avatar-change-content {
+  padding: 1rem 0;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 500;
+  color: #fff;
+  text-align: left;
+}
+
+.section-description {
+  color: #aaa;
+  margin: 0 0 2rem 0;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.avatar-change-columns {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.upload-column,
+.preview-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 300px; /* Set a fixed height for both columns */
+}
+
+.drop-area {
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.drop-area:hover {
+  border-color: rgba(155, 77, 202, 0.6);
+  background-color: rgba(155, 77, 202, 0.05);
+}
+
+.drop-area.dragging {
+  border-color: rgba(155, 77, 202, 0.8);
+  background-color: rgba(155, 77, 202, 0.1);
+}
+
+.drop-icon {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(155, 77, 202, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.drop-icon img {
+  width: 30px;
+  height: 30px;
+}
+
+.drop-area p {
+  color: #ccc;
+  margin: 0;
+}
+
+.progress-container {
+  margin-top: 1rem;
+  width: 95%;
+}
+
+.file-upload-status {
+  display: flex;
+  align-items: center;
+  background-color: rgba(30, 30, 30, 0.5);
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  width: 100%;
+}
+
+.file-icon {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(155, 77, 202, 0.15);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.file-icon img {
+  width: 24px;
+  height: 24px;
+}
+
+.file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name {
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress-bar-wrapper {
+  width: 100%;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #9b4dca;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-details {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+
+.progress-text {
+  color: #aaa;
+  font-size: 0.8rem;
+  margin-right: 8px;
+}
+
+.cancel-upload {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.cancel-upload:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.preview-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.avatar-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  background-color: #1e1e1e;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  aspect-ratio: 1 / 1; /* Enforce 1:1 aspect ratio */
+}
+
+.avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.current-avatar-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1; /* Enforce 1:1 aspect ratio */
+}
+
+.scale-controls {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  justify-content: center;
+  height: auto; /* Ensure this doesn't affect the container height */
+  position: relative;
+}
+
+.scale-controls span {
+  margin-right: 1rem;
+  color: #ccc;
+}
+
+.scale-controls input {
+  width: 100%;
+  max-width: 200px;
+}
+
+.update-avatar-btn {
+  background-color: #9b4dca;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 400;
+  margin-top: 1rem;
+  align-self: flex-start;
+}
+
+.update-avatar-btn:hover {
+  background-color: #8a3cb9;
+}
+
+.update-avatar-btn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .avatar-change-columns {
+    flex-direction: column;
+  }
+  
+  .upload-column,
+  .preview-column {
+    height: 250px; /* Slightly smaller height on mobile but still maintained */
+    margin-bottom: 1.5rem;
+  }
+  
+  .avatar-circle {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .drop-area {
+    padding: 1.5rem;
+  }
+  
+  .file-upload-status {
+    padding: 8px;
+  }
+  
+  .file-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+  }
+  
+  .file-icon img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .file-name {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+  
+  .progress-bar {
+    height: 6px;
+  }
+}

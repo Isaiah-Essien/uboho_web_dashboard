@@ -1,0 +1,392 @@
+.overview-header {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between elements */
+}
+
+.back-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #1e1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.back-button img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.overview-title {
+  margin: 0;
+  font-size: 1.5rem;
+  flex-grow: 1;
+}
+
+
+.settings-avatar {
+  width: auto;
+  height: auto;
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 50%;
+}
+
+.settings-user-info {
+  margin-left: 10px;
+}
+
+.settings-name {
+  font-weight: bold;
+}
+
+.settings-email {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.status-container {
+  margin-top: 10px;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 25px;
+  font-size: 1rem;
+  color: white;
+  text-align: center;
+}
+
+.seizure {
+  background-color: red;
+  opacity: 0.7;
+}
+
+.no-seizure {
+  background-color: green;
+  opacity: 0.7;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.update-password-btn {
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.update-password-btn img {
+  width: 18px;
+  margin-right: 5px;
+}
+
+.update-password-btn:hover {
+  background-color: #0056b3;
+}
+
+.new-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.new-button:hover {
+  background-color: #218838;
+}
+
+.dots-button {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.dots-button:hover {
+  background-color: #f2f2f2;
+}
+
+.password-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.password-icon.no-margin {
+  margin-right: 0;
+}
+
+/* Charts Section */
+.graphs-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.graph-container {
+  border: 1px solid #dddddd7a;
+  border-radius: 10px;
+  padding: 12px;
+  background: transparent;
+  margin-top: 15px;
+  height: 100%; /* Slightly increased height */
+}
+
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.graph-title {
+  margin: 0;
+  font-size: 17px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.filter-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px 5px 26px;
+  border-radius: 7px;
+  border: 1px solid #e0e0e08c;
+  background: transparent;
+  font-size: 0.85rem;
+  color: #555;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: left 8px center;
+  background-size: 12px;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.divider {
+  height: 1px;
+  background: #eeeeee85;
+  margin: 10px 0;
+}
+
+.graph-description {
+  color: #666;
+  font-size: 13px;
+  margin: 0 0 10px 0;
+}
+
+.chart-wrapper {
+  height: 180px;
+  position: relative;
+}
+
+.chart-hover-line {
+  position: absolute;
+  background: #4CAF50;
+  width: 1px;
+  height: 100%;
+  z-index: 100;
+  display: none;
+  pointer-events: none;
+}
+
+.rotation-activity .chart-hover-line {
+  background: #FFC107;
+}
+
+.chart-point-hover {
+  position: absolute;
+  background: #4CAF50;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 101;
+  display: none;
+  pointer-events: none;
+}
+
+.rotation-activity .chart-point-hover {
+  background: #FFC107;
+}
+
+.chartjs-render-monitor {
+  cursor: crosshair;
+}
+
+.peaks-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3px;
+  /* Remove horizontal padding so it fits inside .graph-container */
+  padding: 0;
+}
+
+.peak-value {
+  text-align: left;
+  min-width: 70px;
+}
+
+.peak-label {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.peak-number {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.peak-bars {
+  display: flex;
+  gap: 5px;
+  align-items: flex-end;
+  height: 40px;
+  flex-grow: 1;
+  /* Reduced margin for better fit */
+  margin: 0 5px;
+}
+
+.peak-bar {
+  width: 4px;
+  min-height: 2px;
+  border-radius: 2px;
+  transition: height 0.3s ease;
+}
+
+.view-raw-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.raw-text {
+  color: #333;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.color-indicators {
+  display: flex;
+  gap: 2px;
+}
+
+.green-indicator,
+.yellow-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Location Popup Styles */
+.location-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.location-popup {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  width: 700px;
+  height: 380px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+}
+
+.popup-left-column {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.popup-avatar {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.emergency-contact-btn {
+  padding: 12px;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: auto;
+  font-weight: 300;
+  font-size: 15px;
+}
+
+.emergency-contact-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+}
+
+.popup-right-column {
+  width: 50%;
+  height: 100%;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background-color: #1e1e1e;
+  padding-right: 12px;
+  border-radius: 9px;
+  margin-left: 9px;
+}
+
+.dropdown-menu-content button {
+  font-weight: 300 !important; /* Force font weight to 300 */
+  font-size: 14px; /* Reduced font size slightly */
+}

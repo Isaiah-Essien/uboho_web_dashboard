@@ -6,8 +6,8 @@ A comprehensive healthcare dashboard application built with React and Vite for m
 
 
 ## Relevant Links
-[Demovideo](https://drive.google.com/file/d/14WXmmZ6_gm_oLvGo59iwW-YrxHWmAgIx/view?usp=sharing)
-[Figma design](https://www.figma.com/design/EjFiGZ5k5acmHJRQBd7kbL/Uboho?node-id=27-572&t=KELwLbz414nI3asK-1)
+- [Demovideo](https://drive.google.com/file/d/14WXmmZ6_gm_oLvGo59iwW-YrxHWmAgIx/view?usp=sharing)
+- [Figma design](https://www.figma.com/design/EjFiGZ5k5acmHJRQBd7kbL/Uboho?node-id=27-572&t=KELwLbz414nI3asK-1)
 
 ## Screenshots & Demos
 

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useHospital } from '../contexts/HospitalContext';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';
+import { getProfileImageUrl } from '../services/profileImageService';
 import './styles/Sidebar.css';
 
 const navItems = [
@@ -28,6 +32,52 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { logout, currentUser } = useAuth();
   const [isMobile, setIsMobile] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
+
+  // Helper function to get the first initial from a name
+  const getInitial = (name) => {
+    if (!name) return 'U'; // Default to 'U' for Unknown User
+    return name.charAt(0).toUpperCase();
+  };
+
+  // Helper function to generate a consistent color based on the name
+  const getAvatarColor = (name) => {
+    if (!name) return '#6c757d'; // Default gray color
+    
+    // Array of nice colors for avatars
+    const colors = [
+      '#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1', 
+      '#fd7e14', '#20c997', '#e83e8c', '#6c757d', '#17a2b8', 
+      '#343a40', '#6610f2'
+    ];
+    
+    // Generate a consistent index based on the name
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // Use absolute value and modulo to get a valid index
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  };
+
+  // Fetch profile image when user changes
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (currentUser) {
+        try {
+          const imageUrl = await getProfileImageUrl(currentUser.uid, 'admins', null);
+          setProfileImageUrl(imageUrl);
+        } catch (error) {
+          console.log('No profile image found for user:', currentUser.uid);
+          setProfileImageUrl(null);
+        }
+      }
+    };
+
+    fetchProfileImage();
+  }, [currentUser]);
 
   const handleLogout = async () => {
     try {
@@ -104,7 +154,31 @@ const Sidebar = () => {
       <div className="divider" />
 
       <div className="profile-section">
-        <img src="/login-img.png" alt="Profile" className="profile-pic" />
+        <div className="profile-pic-container">
+          {profileImageUrl ? (
+            <img 
+              src={profileImageUrl} 
+              alt="Profile" 
+              className="profile-pic"
+              onError={() => setProfileImageUrl(null)} // Fallback to initial avatar on error
+            />
+          ) : (
+            <div 
+              className="profile-pic initial-avatar"
+              style={{ 
+                backgroundColor: getAvatarColor(currentUser?.displayName || currentUser?.email),
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 'bold',
+                fontSize: '14px'
+              }}
+            >
+              {getInitial(currentUser?.displayName || currentUser?.email)}
+            </div>
+          )}
+        </div>
         {!isMobile && (
           <span className="username">
             {currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User'}

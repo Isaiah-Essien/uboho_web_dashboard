@@ -169,10 +169,40 @@
   display: none;
 }
 
+.chat-attach-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-left: 8px;
+  margin-right: 8px;
+  padding: 0;
+}
+
+.chat-attach-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.chat-attach-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-attach-button img {
+  width: 20px;
+  height: 20px;
+}
+
 .chat-send-button {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 50%;
   background-color: #9b4dca;
   display: flex;
   align-items: center;
@@ -191,7 +221,6 @@
 .chat-send-button img {
   width: 20px;
   height: 20px;
-  transform: rotate(45deg);
 }
 
 @media (max-width: 768px) {

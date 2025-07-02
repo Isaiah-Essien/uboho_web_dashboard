@@ -1,7 +1,8 @@
 // src/components/HeaderActions.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { performGlobalSearch } from '../utils/searchUtils';
+import { performGlobalSearch } from '../../utils/searchUtils';
+import { useNotifications } from '../../contexts/NotificationContext';
 import './styles/HeaderActions.css';
 
 const HeaderActions = ({ onSearch }) => {
@@ -12,11 +13,7 @@ const HeaderActions = ({ onSearch }) => {
   const [activeResultIndex, setActiveResultIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, message: "New message from John", time: "2 min ago", read: false },
-    { id: 2, message: "Your order has been shipped", time: "1 hour ago", read: false },
-    { id: 3, message: "Welcome to Uboho!", time: "2 hours ago", read: true },
-  ]);
+  const { notifications, unreadCount, markAsRead } = useNotifications();
   
   const searchRef = useRef(null);
   const notificationRef = useRef(null);
@@ -118,15 +115,22 @@ const HeaderActions = ({ onSearch }) => {
     }
   };
 
-  // Mark notification as read
-  const markAsRead = (notificationId) => {
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === notificationId 
-          ? { ...notification, read: true }
-          : notification
-      )
-    );
+  // Handle notification click
+  const handleNotificationClick = (notification) => {
+    // Mark as read
+    markAsRead(notification.id);
+    
+    // If it's a message notification, navigate to messages
+    if (notification.type === 'message') {
+      navigate('/messages');
+      setShowNotifications(false);
+    }
+  };
+
+  // Handle view all notifications
+  const handleViewAll = () => {
+    navigate('/messages'); // For now, redirect to messages
+    setShowNotifications(false);
   };
 
   // Navigate to a search result
@@ -156,9 +160,6 @@ const HeaderActions = ({ onSearch }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  // Count unread notifications
-  const unreadCount = notifications.filter(n => !n.read).length;
   
   // Debug mode (set to false to hide debugging info)
   const DEBUG_MODE = false;

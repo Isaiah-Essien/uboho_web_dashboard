@@ -267,8 +267,8 @@ const Messages = () => {
             name: userData.displayName || userData.name || 'User',
             role: userData.role || 'user',
             email: userData.email || '',
-            avatar: userData.avatar || 'default-avatar.png',
-            profilePic: userData.avatar || 'default-avatar.png',
+            avatar: userData.profileImageUrl || '/default-avatar.png',
+            profilePic: userData.profileImageUrl || '/default-avatar.png',
             userId: id
           };
         }
@@ -293,8 +293,8 @@ const Messages = () => {
             name: doctorData.name || 'Unknown Doctor',
             role: 'doctor',
             email: doctorData.email || '',
-            avatar: doctorData.avatar || 'default-avatar.png',
-            profilePic: doctorData.avatar || 'default-avatar.png',
+            avatar: doctorData.profileImageUrl || '/default-avatar.png',
+            profilePic: doctorData.profileImageUrl || '/default-avatar.png',
             userId: doctorData.authUid || docSnap.id
           };
         }
@@ -317,8 +317,8 @@ const Messages = () => {
             name: patientData.name || 'Unknown Patient',
             role: 'patient',
             email: patientData.email || '',
-            avatar: patientData.avatar || 'default-avatar.png',
-            profilePic: patientData.avatar || 'default-avatar.png',
+            avatar: patientData.profileImageUrl || '/default-avatar.png',
+            profilePic: patientData.profileImageUrl || '/default-avatar.png',
             userId: patientData.authUid || docSnap.id
           };
         }
@@ -336,8 +336,8 @@ const Messages = () => {
             name: adminData.displayName || adminData.name || currentHospital.adminName || 'Hospital Admin',
             role: 'admin',
             email: adminData.email || currentHospital.adminEmail,
-            avatar: adminData.avatar || 'default-avatar.png',
-            profilePic: adminData.avatar || 'default-avatar.png',
+            avatar: adminData.profileImageUrl || '/default-avatar.png',
+            profilePic: adminData.profileImageUrl || '/default-avatar.png',
             userId: currentHospital.adminId
           };
         }
@@ -508,13 +508,33 @@ const Messages = () => {
               filteredConversations.map((conversation) => (
                 <div key={conversation.id} className="chat-list-row">
                   <div className="chat-profile">
-                    <div 
+                    {/* Show profile image if available, otherwise show colored initial */}
+                    {conversation.otherUser.avatar && conversation.otherUser.avatar !== '/default-avatar.png' ? (
+                      <img
+                        src={conversation.otherUser.avatar}
+                        alt={conversation.otherUser.name}
+                        style={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                          marginRight: '12px',
+                          flexShrink: 0,
+                          objectFit: 'cover',
+                          display: 'block'
+                        }}
+                        onError={e => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div
                       style={{
                         backgroundColor: getAvatarColor(conversation.otherUser.name),
                         width: '50px',
                         height: '50px',
                         borderRadius: '50%',
-                        display: 'flex',
+                        display: (conversation.otherUser.avatar && conversation.otherUser.avatar !== '/default-avatar.png') ? 'none' : 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         color: 'white',

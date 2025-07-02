@@ -117,7 +117,9 @@ const CreateDoctor = () => {
       }
       
       // Check error type and provide appropriate message
-      if (errorMessage.toLowerCase().includes('email') || 
+      if (errorMessage.includes('email address already exists')) {
+        setError('A doctor with this email address already exists in your hospital. Please use a different email address.');
+      } else if (errorMessage.toLowerCase().includes('email') || 
           errorMessage.includes('EmailJSResponseStatus') ||
           (error && error.name && error.name.includes('EmailJS'))) {
         setError('Doctor created but failed to send invitation email. Please contact the doctor manually with setup instructions.');

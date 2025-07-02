@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { HospitalProvider } from './contexts/HospitalContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login.jsx';
 import ForgotPass from './pages/ForgotPassword.jsx';
@@ -30,7 +31,8 @@ function App() {
   return (
     <AuthProvider>
       <HospitalProvider>
-        <Router>
+        <NotificationProvider>
+          <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
@@ -57,6 +59,7 @@ function App() {
           {/* <Route path="/email-debug" element={<EmailDebugTest />} /> */}
         </Routes>
         </Router>
+        </NotificationProvider>
       </HospitalProvider>
     </AuthProvider>
   );

@@ -1,9 +1,16 @@
 import emailjs from '@emailjs/browser';
 
-// EmailJS configuration - you'll need to set these up in your EmailJS account
-const EMAILJS_SERVICE_ID = 'service_2nxh02m';
-const EMAILJS_TEMPLATE_ID = 'template_4fp5hrj'; // Replace with your template ID
-const EMAILJS_PUBLIC_KEY = 'ars7eBQgj4hgM2R5j'; // Replace with your public key
+// EmailJS configuration - loaded from environment variables
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PATIENT_WELCOME_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_PATIENT_WELCOME_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+// Validate that all required environment variables are present
+if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PATIENT_WELCOME_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+  console.error('Missing required EmailJS environment variables. Please check your .env file.');
+  console.error('Required variables: VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PATIENT_WELCOME_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY');
+}
 
 // Initialize EmailJS
 emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -74,6 +81,58 @@ export const sendDoctorInvitationEmail = async (doctorData, setupToken) => {
       throw new Error('EmailJS Authentication Error: Check your Service ID, Template ID, and Public Key');
     } else if (error.status === 400) {
       throw new Error('EmailJS Bad Request: Check your template configuration and parameters');
+    } else {
+      throw error;
+    }
+  }
+};
+
+/**
+ * Send welcome email to newly registered patient
+ * @param {Object} patientData - Patient information
+ * @param {string} patientData.email - Patient's email
+ * @param {string} patientData.name - Patient's name
+ * @param {string} patientData.hospitalName - Hospital name
+ * @param {string} patientId - Patient's unique ID
+ * @returns {Promise} EmailJS response
+ */
+export const sendPatientWelcomeEmail = async (patientData, patientId) => {
+  try {
+    // Dummy mobile app download link
+    const mobileAppLink = 'https://play.google.com/store/apps/details?id=com.uboho.app';
+    
+    // Template parameters for patient welcome email
+    const templateParams = {
+      patient_name: patientData.name,           // {{patient_name}} in your template
+      patient_id: patientId,                   // {{patient_id}} in your template
+      hospital_name: patientData.hospitalName, // {{hospital_name}} in your template
+      mobile_app_link: mobileAppLink,          // {{mobile_app_link}} in your template
+      email: patientData.email                 // {{email}} in your template
+    };
+
+    console.log('Sending patient welcome email with parameters:', templateParams);
+
+    const response = await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_PATIENT_WELCOME_TEMPLATE_ID,
+      templateParams,
+      EMAILJS_PUBLIC_KEY
+    );
+
+    console.log('✅ Patient welcome email sent successfully:', response);
+    return response;
+  } catch (error) {
+    console.error('❌ Error sending patient welcome email:', error);
+    console.error('Error status:', error.status);
+    console.error('Error text:', error.text);
+    
+    // Add specific error messages for common issues
+    if (error.status === 422) {
+      throw new Error('EmailJS Template Error: Check that your patient welcome template variables match exactly (patient_name, patient_id, hospital_name, mobile_app_link, email)');
+    } else if (error.status === 401) {
+      throw new Error('EmailJS Authentication Error: Check your Service ID, Template ID, and Public Key');
+    } else if (error.status === 400) {
+      throw new Error('EmailJS Bad Request: Check your patient welcome template configuration and parameters');
     } else {
       throw error;
     }

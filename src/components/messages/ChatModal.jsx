@@ -108,20 +108,20 @@ const ChatModal = ({ isOpen, onClose }) => {
           const doctorData = doc.data();
           console.log('Doctor updated:', doc.id, doctorData);
           
-          const isCurrentUser = doctorData.authUid === currentUser.uid || 
+          const isCurrentUser = doctorData.authId === currentUser.uid || 
                                doc.id === currentUser.uid ||
                                doctorData.email === currentUser.email;
           
           if (!isCurrentUser) {
             hospitalUsers.set(`doctor_${doc.id}`, {
               id: doc.id,
-              authUid: doctorData.authUid || null,
+              authId: doctorData.authId || null,
               name: doctorData.name || 'Unknown Doctor',
               role: 'doctor',
               email: doctorData.email || '',
-              avatar: doctorData.avatar || 'default-avatar.png',
+              avatar: doctorData.profileImageUrl || '/default-avatar.png',
               employeeId: doc.id,
-              hasAuthAccount: !!doctorData.authUid,
+              hasAuthAccount: !!doctorData.authId,
               status: doctorData.status || 'pending'
             });
           }
@@ -156,20 +156,20 @@ const ChatModal = ({ isOpen, onClose }) => {
           const patientData = doc.data();
           console.log('Patient updated:', doc.id, patientData);
           
-          const isCurrentUser = patientData.authUid === currentUser.uid || 
+          const isCurrentUser = patientData.authId === currentUser.uid || 
                                doc.id === currentUser.uid ||
                                patientData.email === currentUser.email;
           
           if (!isCurrentUser) {
             hospitalUsers.set(`patient_${doc.id}`, {
               id: doc.id,
-              authUid: patientData.authUid || null,
+              authId: patientData.authId || null,
               name: patientData.name || 'Unknown Patient',
               role: 'patient',
               email: patientData.email || '',
-              avatar: patientData.avatar || 'default-avatar.png',
+              avatar: patientData.profileImageUrl || '/default-avatar.png',
               patientId: doc.id,
-              hasAuthAccount: !!patientData.authUid
+              hasAuthAccount: !!patientData.authId
             });
           }
         });
@@ -194,11 +194,11 @@ const ChatModal = ({ isOpen, onClose }) => {
             const adminData = adminDoc.data();
             hospitalUsers.set('admin', {
               id: currentHospital.adminId,
-              authUid: currentHospital.adminId,
+              authId: currentHospital.adminId,
               name: adminData.displayName || adminData.name || currentHospital.adminName || 'Hospital Admin',
               role: 'admin',
               email: adminData.email || currentHospital.adminEmail,
-              avatar: adminData.avatar || 'default-avatar.png',
+              avatar: adminData.profileImageUrl || '/default-avatar.png',
               employeeId: 'ADMIN',
               hasAuthAccount: true
             });
@@ -278,7 +278,7 @@ const ChatModal = ({ isOpen, onClose }) => {
         <div className="chat-modal-header">
           <h2 className="chat-modal-title">Start a Chat</h2>
           <button className="chat-close-button" onClick={onClose}>
-            <img src="/chevleft-icon.svg" alt="Close" style={{ transform: 'rotate(45deg)' }} />
+            <img src="/close.svg" alt="Close" />
           </button>
         </div>
         
@@ -346,11 +346,31 @@ const ChatModal = ({ isOpen, onClose }) => {
                     }
                     console.log('Starting chat with user:', user);
                     onClose();
-                    // Use authUid for navigation if available, otherwise use id
-                    const chatUserId = user.authUid || user.id;
-                    navigate(`/messages/chat/${chatUserId}`);
+                    // Use the document ID for navigation, as requested
+                    navigate(`/messages/chat/${user.id}`);
                   }}
                 >
+                  {/* Show profile picture if available, otherwise show colored initial */}
+                  {user.avatar && user.avatar !== '/default-avatar.png' ? (
+                    <img 
+                      src={user.avatar} 
+                      alt={user.name}
+                      className="chat-user-avatar"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        marginRight: '16px',
+                        flexShrink: 0,
+                        objectFit: 'cover'
+                      }}
+                      onError={(e) => {
+                        // Hide the image and show the fallback div
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
                   <div 
                     className="chat-user-avatar"
                     style={{
@@ -358,7 +378,7 @@ const ChatModal = ({ isOpen, onClose }) => {
                       width: '40px',
                       height: '40px',
                       borderRadius: '50%',
-                      display: 'flex',
+                      display: (user.avatar && user.avatar !== '/default-avatar.png') ? 'none' : 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: 'white',

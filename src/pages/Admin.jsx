@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import HeaderActions from '../components/HeaderActions';
 import UserCleanupTool from '../components/UserCleanupTool';
+import DoctorProfileModal from '../components/DoctorProfileModal';
 import { useHospital } from '../contexts/HospitalContext';
 import '../overview.css';
 import '../Patients.css';
@@ -15,8 +16,14 @@ const Admin = () => {
   const [error, setError] = useState('');
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const dropdownRefs = useRef([]);
+  const floatingMenuRef = useRef(null); // Added ref for the floating menu
   const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
   const navigate = useNavigate();
+  
+  // Modal state
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState('view'); // 'view' or 'edit'
   
   // Column filter functionality
   const [showFilterMenu, setShowFilterMenu] = useState(false);
@@ -76,10 +83,21 @@ const Admin = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (openMenuIndex !== null) {
-        const currentRef = dropdownRefs.current[openMenuIndex];
-        if (currentRef && !currentRef.contains(event.target)) {
-          setOpenMenuIndex(null);
+        const triggerButtonRef = dropdownRefs.current[openMenuIndex];
+
+        // If click is on the trigger button, let toggleMenu handle it
+        if (triggerButtonRef && triggerButtonRef.contains(event.target)) {
+          return;
         }
+
+        // If click is inside the floating menu, do nothing
+        if (floatingMenuRef.current && floatingMenuRef.current.contains(event.target)) {
+          return;
+        }
+        
+        // Otherwise, click is outside both, so close the menu
+        // console.log('handleClickOutside: Closing menu. Click target:', event.target);
+        setOpenMenuIndex(null);
       }
     };
 
@@ -89,44 +107,97 @@ const Admin = () => {
 
   const toggleMenu = (index, e) => {
     e.stopPropagation();
-    
-    // If clicking on already open menu, close it
     if (openMenuIndex === index) {
       setOpenMenuIndex(null);
       return;
     }
-    
-    // Calculate position for the dropdown
     const button = e.currentTarget;
     const rect = button.getBoundingClientRect();
     const menuWidth = 140; // Approximate width of the menu
-    
-    // Calculate the best left position to ensure the menu is fully visible
-    // If the menu would go off-screen to the right, shift it to the left
+    let menuHeight = 120; // Default height, will adjust after render
     let leftPosition = rect.left + window.scrollX;
-    const rightEdgePosition = leftPosition + menuWidth;
-    
-    // If the menu would go beyond the right edge of the screen, adjust leftPosition
-    if (rightEdgePosition > window.innerWidth) {
-      leftPosition = leftPosition - (rightEdgePosition - window.innerWidth) - 20; // Add extra 20px margin
+    let topPosition = rect.bottom + window.scrollY;
+
+    // Adjust left if menu would overflow right edge
+    if (leftPosition + menuWidth > window.innerWidth) {
+      leftPosition = window.innerWidth - menuWidth - 10;
     }
-    
-    // Ensure menu doesn't go off-screen to the left
-    leftPosition = Math.max(10, leftPosition);
-    
-    // Set position based on button's position in viewport
-    setMenuPosition({
-      top: rect.bottom + window.scrollY,
-      left: leftPosition
-    });
-    
-    // Open the menu
+
+    // Temporarily set menu position to calculate real height after render
+    setMenuPosition({ top: topPosition, left: leftPosition });
     setOpenMenuIndex(index);
+
+    // After menu is rendered, adjust if it overflows bottom
+    setTimeout(() => {
+      if (floatingMenuRef.current) {
+        const menuRect = floatingMenuRef.current.getBoundingClientRect();
+        menuHeight = menuRect.height;
+        if (menuRect.bottom > window.innerHeight) {
+          // Move menu above the button if it would overflow
+          topPosition = rect.top + window.scrollY - menuHeight;
+          setMenuPosition({ top: topPosition, left: leftPosition });
+        }
+      }
+    }, 0);
   };
 
-  const handleAction = (action, adminId) => {
-    console.log(`${action} clicked for ${adminId}`);
+  const handleAction = (action, doctorId) => {
+    console.log('handleAction called with:', action, doctorId);
+    const doctor = doctors.find(d => d.id === doctorId);
+    if (!doctor) {
+        console.error('Doctor not found for ID:', doctorId);
+        return;
+    }
+
+    setSelectedDoctor(doctor);
     setOpenMenuIndex(null);
+
+    switch (action.toLowerCase()) {
+        case 'view':
+            setModalMode('view');
+            setShowModal(true);
+            break;
+        case 'edit':
+            setModalMode('edit');
+            setShowModal(true);
+            break;
+        case 'delete':
+            if (window.confirm(`Are you sure you want to delete Dr. ${doctor.name}?`)) {
+                handleDoctorDeleted(doctorId);
+            }
+            break;
+        default:
+            console.warn('Unknown action:', action);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedDoctor(null);
+    setModalMode('view');
+  };
+
+  const handleModeChange = (newMode) => {
+    setModalMode(newMode);
+  };
+
+  const handleDoctorUpdated = async () => {
+    // Refresh the doctors list
+    try {
+      const fetchedDoctors = await getDoctors();
+      setDoctors(fetchedDoctors.map(doctor => ({
+        ...doctor,
+        hospital: currentHospital?.name || 'Unknown',
+        dateJoined: doctor.createdAt ? new Date(doctor.createdAt.seconds * 1000).toLocaleDateString() : 'Unknown'
+      })));
+    } catch (err) {
+      console.error('Error refreshing doctors:', err);
+    }
+  };
+
+  const handleDoctorDeleted = async () => {
+    // Refresh the doctors list after deletion
+    await handleDoctorUpdated();
   };
 
   return (
@@ -243,7 +314,21 @@ const Admin = () => {
                   <tr key={doctor.id}>
                     {columnVisibility.avatar && (
                       <td>
-                        <div className="patient-avatar-placeholder">
+                        {doctor.profileImageUrl ? (
+                          <img 
+                            src={doctor.profileImageUrl} 
+                            alt={doctor.name}
+                            className="patients-table patient-avatar"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className="patient-avatar-placeholder"
+                          style={{ display: doctor.profileImageUrl ? 'none' : 'flex' }}
+                        >
                           {doctor.name ? doctor.name.charAt(0).toUpperCase() : 'D'}
                         </div>
                       </td>
@@ -279,6 +364,7 @@ const Admin = () => {
         {/* Floating Menu - Rendered outside the table to prevent layout issues */}
         {openMenuIndex !== null && (
           <div 
+            ref={floatingMenuRef} // Added ref here
             className="floating-dropdown-menu"
             style={{
               position: 'fixed',
@@ -288,18 +374,53 @@ const Admin = () => {
             }}
           >
             <div className="dropdown-menu-content">
-              <button onClick={() => handleAction('Edit', doctors[openMenuIndex].id)}>
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('View button clicked for doctor:', doctors[openMenuIndex]?.id);
+                  handleAction('View', doctors[openMenuIndex].id);
+                }}
+                className="dropdown-menu-item"
+              >
+                View
+              </button>
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('Edit button clicked for doctor:', doctors[openMenuIndex]?.id);
+                  handleAction('Edit', doctors[openMenuIndex].id);
+                }}
+                className="dropdown-menu-item"
+              >
                 Edit
               </button>
-              <button onClick={() => handleAction('Delete', doctors[openMenuIndex].id)}>
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('Delete button clicked for doctor:', doctors[openMenuIndex]?.id);
+                  handleAction('Delete', doctors[openMenuIndex].id);
+                }}
+                className="dropdown-menu-item"
+              >
                 Delete
-              </button>
-              <button onClick={() => handleAction('View', doctors[openMenuIndex].id)}>
-                View
               </button>
             </div>
           </div>
         )}
+
+        {/* Doctor Profile Modal */}
+        <DoctorProfileModal
+          doctor={selectedDoctor}
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          mode={modalMode}
+          onModeChange={handleModeChange}
+          onDoctorUpdated={handleDoctorUpdated}
+          onDoctorDeleted={handleDoctorDeleted}
+        />
       </div>
     </div>
   );

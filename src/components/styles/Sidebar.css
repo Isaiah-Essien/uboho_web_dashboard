@@ -168,6 +168,17 @@
     object-fit: cover;
   }
   
+  .profile-pic.initial-avatar {
+    border: none;
+    flex-shrink: 0;
+  }
+  
+  .profile-pic-container {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+  
   .username {
     font-size: 0.95rem;
     color: #fff;

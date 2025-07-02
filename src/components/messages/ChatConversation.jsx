@@ -17,6 +17,7 @@ const ChatConversation = ({ user, onClose }) => {
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+  const fileInputRef = useRef(null);
   const { currentUser } = useAuth();
   const { currentHospital } = useHospital();
 
@@ -64,9 +65,15 @@ const ChatConversation = ({ user, onClose }) => {
       return null;
     }
 
+    const otherUserId = user.authId || user.userId || user.id;
+    if (!otherUserId) {
+      console.error("Cannot get or create conversation without the other user's ID.");
+      return null;
+    }
+
     try {
       // Create a consistent conversation ID based on participant IDs
-      const participants = [currentUser.uid, user.authUid || user.userId || user.id].sort();
+      const participants = [currentUser.uid, otherUserId].sort();
       const conversationId = participants.join('_');
       
       console.log('Getting/creating conversation:', conversationId);
@@ -82,7 +89,7 @@ const ChatConversation = ({ user, onClose }) => {
           createdAt: serverTimestamp(),
           unreadCount: {
             [currentUser.uid]: 0,
-            [user.authUid || user.userId || user.id]: 0
+            [otherUserId]: 0
           }
         });
         console.log('Created new conversation:', conversationId);
@@ -105,6 +112,8 @@ const ChatConversation = ({ user, onClose }) => {
       return;
     }
 
+    let unsubscribeFromMessages = () => {};
+
     const setupConversation = async () => {
       setMessagesLoading(true);
       
@@ -117,28 +126,21 @@ const ChatConversation = ({ user, onClose }) => {
 
       setConversationId(convId);
 
-      // Set up real-time listener for messages
       const messagesRef = collection(db, 'hospitals', currentHospital.id, 'conversations', convId, 'messages');
       const messagesQuery = query(messagesRef, orderBy('timestamp', 'asc'));
 
-      const unsubscribe = onSnapshot(
+      unsubscribeFromMessages = onSnapshot(
         messagesQuery,
         (snapshot) => {
-          const messagesList = [];
-          snapshot.forEach((doc) => {
-            const messageData = doc.data();
-            messagesList.push({
-              id: doc.id,
-              ...messageData,
-              timestamp: messageData.timestamp?.toDate?.() || new Date()
-            });
-          });
+          const messagesList = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+            timestamp: doc.data().timestamp?.toDate?.() || new Date()
+          }));
           
-          console.log('Loaded messages:', messagesList.length);
           setMessages(messagesList);
           setMessagesLoading(false);
 
-          // Mark messages as read
           markMessagesAsRead(convId);
         },
         (error) => {
@@ -146,11 +148,13 @@ const ChatConversation = ({ user, onClose }) => {
           setMessagesLoading(false);
         }
       );
-
-      return unsubscribe;
     };
 
     setupConversation();
+
+    return () => {
+      unsubscribeFromMessages();
+    };
   }, [currentUser, currentHospital, user]);
 
   // Mark messages as read
@@ -173,8 +177,7 @@ const ChatConversation = ({ user, onClose }) => {
     
     setSendingMessage(true);
     const messageText = message.trim();
-    setMessage(''); // Clear input immediately for better UX
-    
+
     try {
       console.log('Sending message:', messageText);
       
@@ -190,7 +193,7 @@ const ChatConversation = ({ user, onClose }) => {
 
       // Update conversation metadata
       const conversationRef = doc(db, 'hospitals', currentHospital.id, 'conversations', conversationId);
-      const otherUserId = user.authUid || user.userId || user.id;
+      const otherUserId = user.authId || user.userId || user.id;
       
       await updateDoc(conversationRef, {
         lastMessage: messageText,
@@ -204,6 +207,8 @@ const ChatConversation = ({ user, onClose }) => {
       if (textareaRef.current) {
         textareaRef.current.style.height = '24px';
       }
+      // Now clear input for new message
+      setMessage('');
 
     } catch (error) {
       console.error('Error sending message:', error);
@@ -212,6 +217,31 @@ const ChatConversation = ({ user, onClose }) => {
       alert('Failed to send message. Please try again.');
     } finally {
       setSendingMessage(false);
+      // Refocus and ensure input enabled
+      if (textareaRef.current) {
+        textareaRef.current.focus({ preventScroll: true });
+      }
+    }
+  };
+
+  // Handle file attachment
+  const handleFileAttach = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Handle file selection
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // For now, just show an alert. You can implement file upload logic here
+      alert(`File selected: ${file.name}\nSize: ${(file.size / 1024 / 1024).toFixed(2)} MB\nType: ${file.type}\n\nFile attachment feature coming soon!`);
+      
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -319,25 +349,41 @@ const ChatConversation = ({ user, onClose }) => {
                       key={msg.id} 
                       className={`chat-message ${isMe ? 'sent' : 'received'}`}
                     >
-                      <div 
-                        className="chat-avatar"
-                        style={{
-                          backgroundColor: getAvatarColor(otherUser.name || otherUser.displayName || 'User'),
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '50%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: 'white',
-                          fontSize: '14px',
-                          fontWeight: '600',
-                          fontFamily: 'Gilmer, sans-serif',
-                          flexShrink: 0
-                        }}
-                      >
-                        {getInitial(otherUser.name || otherUser.displayName || 'User')}
-                      </div>
+                      {/* Show profile picture or avatar for non-me messages */}
+                      {!isMe && (
+                        <>
+                          {otherUser.profileImageUrl || otherUser.avatar ? (
+                            <img
+                              src={otherUser.profileImageUrl || otherUser.avatar}
+                              alt={otherUser.name || otherUser.displayName || 'User'}
+                              className="chat-avatar"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div 
+                            className="chat-avatar"
+                            style={{
+                              backgroundColor: getAvatarColor(otherUser.name || otherUser.displayName || 'User'),
+                              width: '32px',
+                              height: '32px',
+                              borderRadius: '50%',
+                              display: (otherUser.profileImageUrl || otherUser.avatar) ? 'none' : 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: 'white',
+                              fontSize: '14px',
+                              fontWeight: '600',
+                              fontFamily: 'Gilmer, sans-serif',
+                              flexShrink: 0
+                            }}
+                          >
+                            {getInitial(otherUser.name || otherUser.displayName || 'User')}
+                          </div>
+                        </>
+                      )}
                       <div className="message-content">
                         {msg.text}
                         <div className="message-time">
@@ -354,7 +400,14 @@ const ChatConversation = ({ user, onClose }) => {
         </div>
 
         <div className="chat-input-container">
-          <textarea
+          <input
+            ref={fileInputRef}
+            type="file"
+            style={{ display: 'none' }}
+            accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"
+            onChange={handleFileSelect}
+          />
+          <textarea autoFocus
             ref={textareaRef}
             className="chat-textarea"
             placeholder="Type a message..."
@@ -364,6 +417,17 @@ const ChatConversation = ({ user, onClose }) => {
             disabled={sendingMessage}
             rows={1}
           />
+          <button 
+            className="chat-attach-button" 
+            onClick={handleFileAttach}
+            disabled={sendingMessage}
+            title="Attach file"
+          >
+            <img 
+              src="/attach.svg" 
+              alt="Attach" 
+            />
+          </button>
           <button 
             className="chat-send-button" 
             onClick={handleSendMessage}
@@ -384,9 +448,8 @@ const ChatConversation = ({ user, onClose }) => {
               }}></div>
             ) : (
               <img 
-                src="/chevleft-icon.svg" 
+                src="/send.svg" 
                 alt="Send" 
-                style={{ transform: 'rotate(135deg)' }} // Point diagonally up-right
               />
             )}
           </button>

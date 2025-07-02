@@ -8,6 +8,7 @@ import Sidebar from '../components/Sidebar';
 import HeaderActions from '../components/HeaderActions';
 import ChangeAvatar from '../components/ChangeAvatar';
 import LoadingSpinner from '../components/LoadingSpinner';
+import getAvatarColor from '../utils/getAvatarColor';
 import '../Overview.css';
 import '../Patients.css';
 import '../Admin.css';
@@ -66,7 +67,7 @@ const Settings = () => {
             userData = {
               name: currentUser.displayName || currentUser.email?.split('@')[0] || 'Administrator',
               email: currentUser.email || 'admin@hospital.com',
-              avatar: currentUser.photoURL || 'profpic.svg'
+              avatar: currentUser.photoURL || '/profpic.svg'
             };
             userRole = 'Admin';
             dateJoined = currentUser.metadata?.creationTime ? 
@@ -114,7 +115,8 @@ const Settings = () => {
           userData = {
             name: currentUser.displayName || currentUser.email?.split('@')[0] || 'Unknown User',
             email: currentUser.email || 'Unknown Email',
-            avatar: currentUser.photoURL || 'profpic.svg'
+            // Do not reference userData.profileImageUrl here, as userData is null
+            avatar: currentUser.photoURL || '/profpic.svg'
           };
           // Only set userRole to 'User' if it wasn't already determined (e.g., Admin)
           if (userRole === 'Unknown') {
@@ -128,9 +130,9 @@ const Settings = () => {
         console.log('Final user data:', userData);
         
         setUserInfo({
-          avatar: userData.avatar || userData.photoURL || 'profpic.svg',
-          name: userData.name || userData.displayName || currentUser.displayName || 'Unknown User',
-          email: userData.email || currentUser.email || 'Unknown Email',
+          avatar: (userData && userData.profileImageUrl) || (userData && userData.photoURL) || (userData && userData.avatar) || '/profpic.svg',
+          name: (userData && (userData.name || userData.displayName)) || currentUser.displayName || 'Unknown User',
+          email: (userData && userData.email) || currentUser.email || 'Unknown Email',
           hospital: currentHospital.name || 'Unknown Hospital',
           privilege: userRole,
           dateJoined: dateJoined,
@@ -145,7 +147,7 @@ const Settings = () => {
         
         // Fallback to basic Auth data
         setUserInfo({
-          avatar: 'profpic.svg',
+          avatar: '/profpic.svg',
           name: currentUser?.displayName || 'Unknown User',
           email: currentUser?.email || 'Unknown Email',
           hospital: 'Unknown Hospital',
@@ -242,12 +244,39 @@ const Settings = () => {
             <div className="settings-profile-row">
               <div className="settings-user-wrapper">
                 <div className="settings-avatar-wrapper">
-                  <img
-                    src={userInfo.avatar || "profpic.svg"}
-                    alt="User Avatar"
-                    className="settings-avatar-profile"
-                  />
-
+                  {userInfo.avatar && userInfo.avatar !== '/profpic.svg' ? (
+                    <img
+                      src={userInfo.avatar}
+                      alt="User Avatar"
+                      className="settings-avatar-profile"
+                      onError={e => {
+                        e.target.onerror = null;
+                        e.target.style.display = 'none';
+                        e.target.parentNode.querySelector('.settings-initial-avatar').style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  {/* Fallback colored initial avatar, always rendered but hidden if image loads */}
+                  <div
+                    className="settings-initial-avatar"
+                    style={{
+                      display: (!userInfo.avatar || userInfo.avatar === '/profpic.svg') ? 'flex' : 'none',
+                      backgroundColor: getAvatarColor(userInfo.name),
+                      color: 'white',
+                      width: 64,
+                      height: 64,
+                      borderRadius: '50%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold',
+                      fontSize: 28,
+                      position: 'absolute',
+                      top: 0,
+                      left: 0
+                    }}
+                  >
+                    {userInfo.name ? userInfo.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
                   {/* Profile icon overlapping - only this should trigger change avatar */}
                   <img
                     src="prof-icon.svg"
@@ -332,8 +361,23 @@ const Settings = () => {
               </p>
 
               <div className="dialog-buttons">
-                <button className="dialog-button purple">Get the Document</button>
-                <button className="dialog-button">Read Docs</button>
+                <a
+                  href="/Uboho_privacy_ethics_docs.pdf"
+                  download
+                  className="dialog-button purple"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  Get the Document
+                </a>
+                <a
+                  href="/Uboho_privacy_ethics_docs.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="dialog-button"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  Read Docs
+                </a>
               </div>
             </div>
           </>

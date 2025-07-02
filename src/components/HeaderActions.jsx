@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { performGlobalSearch } from '../utils/searchUtils';
+import { useNotifications } from '../contexts/NotificationContext';
 import './styles/HeaderActions.css';
 
 const HeaderActions = ({ onSearch }) => {
@@ -14,11 +15,7 @@ const HeaderActions = ({ onSearch }) => {
   
   // Notification state
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, message: "New message from John", time: "2 min ago", read: false },
-    { id: 2, message: "Your order has been shipped", time: "1 hour ago", read: false },
-    { id: 3, message: "Welcome to Uboho!", time: "2 hours ago", read: true },
-  ]);
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   
   const searchRef = useRef(null);
   const notificationRef = useRef(null);
@@ -122,15 +119,26 @@ const HeaderActions = ({ onSearch }) => {
     setShowNotifications(!showNotifications);
   };
 
-  // Mark notification as read
-  const markAsRead = (notificationId) => {
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === notificationId 
-          ? { ...notification, read: true }
-          : notification
-      )
-    );
+  // Handle notification click
+  const handleNotificationClick = (notification) => {
+    // Mark as read
+    markAsRead(notification.id);
+    
+    // If it's a message notification, navigate directly to the conversation
+    if (notification.type === 'message' && notification.senderId) {
+      navigate(`/messages/chat/${notification.senderId}`);
+      setShowNotifications(false);
+    } else if (notification.type === 'message') {
+      // Fallback to messages page
+      navigate('/messages');
+      setShowNotifications(false);
+    }
+  };
+
+  // Handle view all notifications
+  const handleViewAll = () => {
+    navigate('/messages'); // For now, redirect to messages
+    setShowNotifications(false);
   };
 
   // Close dropdowns when clicking outside
@@ -151,9 +159,6 @@ const HeaderActions = ({ onSearch }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  // Count unread notifications
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <div className="header-actions">
@@ -249,7 +254,7 @@ const HeaderActions = ({ onSearch }) => {
                   <div 
                     key={notification.id}
                     className={`notification-item ${!notification.read ? 'unread' : ''}`}
-                    onClick={() => markAsRead(notification.id)}
+                    onClick={() => handleNotificationClick(notification)}
                   >
                     <div className="notification-content">
                       <p className="notification-message">{notification.message}</p>
@@ -266,7 +271,7 @@ const HeaderActions = ({ onSearch }) => {
             </div>
             
             <div className="notification-footer">
-              <button className="view-all-btn">View All</button>
+              <button className="view-all-btn" onClick={handleViewAll}>View All</button>
             </div>
           </div>
         )}

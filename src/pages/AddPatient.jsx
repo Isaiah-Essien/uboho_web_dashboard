@@ -84,7 +84,15 @@ const AddPatient = () => {
       });
     } catch (error) {
       console.error('Error creating patient:', error);
-      setError('Failed to create patient. Please try again.');
+      
+      // Handle specific error messages
+      const errorMessage = error.message || error.toString();
+      
+      if (errorMessage.includes('email address already exists')) {
+        setError('A patient with this email address already exists in your hospital. Please use a different email address.');
+      } else {
+        setError('Failed to create patient. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

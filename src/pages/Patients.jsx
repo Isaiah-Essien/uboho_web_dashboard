@@ -9,8 +9,9 @@ import '../Patients.css';
 
 const Patients = () => {
   const navigate = useNavigate();
-  const { currentHospital, getPatients } = useHospital();
+  const { currentHospital, subscribeToPatients, getAllPatientsSeizureEvents } = useHospital();
   const [patients, setPatients] = useState([]);
+  const [patientsWithLocations, setPatientsWithLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
@@ -28,29 +29,75 @@ const Patients = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const patientsPerPage = 5;
 
-  // Fetch patients data when component mounts
+  // Set up real-time subscription to patients data
   useEffect(() => {
-    const fetchPatientsData = async () => {
-      if (!currentHospital) {
-        setLoading(false);
+    if (!currentHospital) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    console.log('Setting up real-time patients subscription');
+
+    const unsubscribe = subscribeToPatients((patientsData) => {
+      console.log('Patients data updated in real-time:', patientsData.length, 'patients');
+      // Debug: Log patient data structure to see available fields
+      if (patientsData.length > 0) {
+        console.log('Sample patient data:', patientsData[0]);
+        console.log('Patient fields:', Object.keys(patientsData[0]));
+      }
+      setPatients(patientsData);
+      setError('');
+      setLoading(false);
+    });
+
+    // Cleanup subscription on unmount
+    return () => {
+      console.log('Cleaning up patients subscription');
+      unsubscribe();
+    };
+  }, [currentHospital, subscribeToPatients]);
+
+  // Fetch seizure events and merge with patient location data
+  useEffect(() => {
+    const fetchPatientsWithLocationData = async () => {
+      if (!currentHospital || patients.length === 0) {
+        setPatientsWithLocations(patients);
         return;
       }
 
       try {
-        setLoading(true);
-        const patientsData = await getPatients();
-        setPatients(patientsData);
-        setError('');
+        // Get patients with seizure events (same as map)
+        const patientsWithEvents = await getAllPatientsSeizureEvents();
+        console.log('Patients with seizure events for table:', patientsWithEvents);
+        
+        // Create a map of seizure events for quick lookup
+        const seizureEventsMap = new Map();
+        patientsWithEvents.forEach(patient => {
+          if (patient.lastSeizureEvent) {
+            seizureEventsMap.set(patient.id, patient.lastSeizureEvent);
+          }
+        });
+        
+        // Merge location data with patients
+        const patientsWithLocationData = patients.map(patient => {
+          const seizureEvent = seizureEventsMap.get(patient.id);
+          return {
+            ...patient,
+            locationData: seizureEvent?.location || null,
+            seizureStatus: seizureEvent?.status || 'normal'
+          };
+        });
+        
+        setPatientsWithLocations(patientsWithLocationData);
       } catch (error) {
-        console.error('Error fetching patients:', error);
-        setError('Failed to load patients data');
-      } finally {
-        setLoading(false);
+        console.error('Error fetching seizure events for patients table:', error);
+        setPatientsWithLocations(patients);
       }
     };
 
-    fetchPatientsData();
-  }, [currentHospital, getPatients]);
+    fetchPatientsWithLocationData();
+  }, [patients, currentHospital, getAllPatientsSeizureEvents]);
 
   // Close filter menu when clicking outside
   useEffect(() => {
@@ -98,10 +145,10 @@ const Patients = () => {
   const stats = getPatientStats();
 
   // Pagination calculations
-  const totalPages = Math.ceil(patients.length / patientsPerPage);
+  const totalPages = Math.ceil(patientsWithLocations.length / patientsPerPage);
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
-  const currentPatients = patients.slice(indexOfFirstPatient, indexOfLastPatient);
+  const currentPatients = patientsWithLocations.slice(indexOfFirstPatient, indexOfLastPatient);
 
   // Pagination handlers
   const handlePageChange = (pageNumber) => {
@@ -299,7 +346,7 @@ const Patients = () => {
         </div>
 
         <div className="patients-table">
-          {patients.length === 0 ? (
+          {patientsWithLocations.length === 0 ? (
             <div className="empty-state">
               <p>No patients found. Add your first patient to get started.</p>
               <button
@@ -331,7 +378,21 @@ const Patients = () => {
                   >
                     {columnVisibility.avatar && (
                       <td>
-                        <div className="patient-avatar-placeholder">
+                        {patient.profileImageUrl ? (
+                          <img 
+                            src={patient.profileImageUrl} 
+                            alt={patient.name}
+                            className="patients-table patient-avatar"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className="patient-avatar-placeholder"
+                          style={{ display: patient.profileImageUrl ? 'none' : 'flex' }}
+                        >
                           {patient.name ? patient.name.charAt(0).toUpperCase() : 'P'}
                         </div>
                       </td>
@@ -341,16 +402,18 @@ const Patients = () => {
                     {columnVisibility.email && <td>{patient.email || 'N/A'}</td>}
                     {columnVisibility.status && (
                       <td>
-                        <span className={`status-badge ${patient.status || 'active'}`}>
-                          {patient.status || 'Active'}
+                        <span className={`status-badge ${patient.seizureStatus === 'seizure' || patient.seizureStatus === 'active_seizure' ? 'seizure' : 'no-seizure'}`}>
+                          {patient.seizureStatus === 'seizure' || patient.seizureStatus === 'active_seizure' ? 'seizure' : 'no-seizure'}
                         </span>
                       </td>
                     )}
                     {columnVisibility.location && (
                       <td>
-                        {patient.address 
-                          ? `${patient.address.city || ''}${patient.address.city && patient.address.state ? ', ' : ''}${patient.address.state || ''}${(patient.address.city || patient.address.state) && patient.address.country ? ', ' : ''}${patient.address.country || ''}`.trim().replace(/^,|,$/, '') || 'N/A'
-                          : 'N/A'
+                        {patient.locationData && 
+                         (patient.locationData.lat || patient.locationData.latitude) && 
+                         (patient.locationData.long || patient.locationData.longitude)
+                          ? `${(patient.locationData.lat || patient.locationData.latitude).toFixed(6)}, ${(patient.locationData.long || patient.locationData.longitude).toFixed(6)}`
+                          : 'No GPS Data'
                         }
                       </td>
                     )}
@@ -361,7 +424,7 @@ const Patients = () => {
           )}
         </div>
 
-        {patients.length > 0 && (
+        {patientsWithLocations.length > 0 && (
           <div className="pagination-bar">
             <button 
               className="pagination-btn chevron"

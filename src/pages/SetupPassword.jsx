@@ -104,7 +104,7 @@ const SetupPassword = () => {
         {
           passwordSet: true,
           setupToken: null,
-          authUid: user.uid,
+          authId: user.uid, // changed from authUid to authId
           status: 'active',
           passwordSetAt: new Date()
         }

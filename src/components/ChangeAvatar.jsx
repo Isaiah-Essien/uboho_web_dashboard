@@ -207,10 +207,8 @@ const ChangeAvatar = ({ onClose, currentAvatar, onAvatarUpdate }) => {
       setIsUploading(true);
       setUploadProgress(0);
 
-      // Create a unique filename
-      const timestamp = Date.now();
-      const fileExtension = image.name.split('.').pop() || 'jpg';
-      const fileName = `avatars/${currentUser.uid}_${timestamp}.${fileExtension}`;
+      // Create a unique filename that matches the Firebase Storage security rule
+      const fileName = `profile_images/${currentUser.uid}`;
       
       console.log('Starting upload:', fileName);
       

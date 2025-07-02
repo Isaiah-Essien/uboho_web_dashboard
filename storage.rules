@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow authenticated users to upload and manage their own profile images
+    match /profile_images/{userType}/{hospitalId}/{userId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == userId || 
+         userType == 'patients' || 
+         userType == 'doctors' || 
+         userType == 'admins');
+    }
+    
+    // Allow authenticated users to read profile images
+    match /profile_images/{allPaths=**} {
+      allow read: if request.auth != null;
+    }
+    
+    // Deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

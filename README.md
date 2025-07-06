@@ -6,21 +6,25 @@ A comprehensive healthcare dashboard application built with React and Vite for m
 
 
 ## Relevant Links
-- [Demovideo](https://drive.google.com/file/d/14WXmmZ6_gm_oLvGo59iwW-YrxHWmAgIx/view?usp=sharing)
+- [Demovideo](https://drive.google.com/file/d/1XLzOHM6Bv0CMiRLJ8UZinhGnnOnriDTX/view?usp=sharing)
 - [Figma design](https://www.figma.com/design/EjFiGZ5k5acmHJRQBd7kbL/Uboho?node-id=27-572&t=KELwLbz414nI3asK-1)
 - [Link to repo](https://github.com/Isaiah-Essien/uboho_web_dashboard)
+- [Final Deployed Link](https://lighthearted-tapioca-426dd6.netlify.app/)
 
 ## Screenshots & Demos
 
 ### Dashaboard
 
-![Doctor's dashboard](src/assets/screenshots/dashboard_overview.png)
+![Doctor's dashboard](src/assets/screenshots/overview.png)
 
 ### Emergency Location Sharing
-![Location Screenshot](src/assets/screenshots/location.png)
+![Location Screenshot](src/assets/screenshots/track_location.png)
 
 ### Patient–Doctor Chat
 ![Chat Interface](src/assets/screenshots/chat.png)
+
+###
+![Patients](src/assets/screenshots/all_patients.png)
 
 ---
 
@@ -138,51 +142,5 @@ If you encounter issues:
 
 ---
 
-
-## Uboho App
-
-
-**Uboho** is a real-time mobile monitoring application designed for individuals living with epilepsy. It passively captures motion and rotation data using smartphone sensors, applies AI-based seizure detection models, and connects patients to healthcare providers through real-time alerts, communication, and remote monitoring.
-
----
-
-
-## AI Model
-
-The app integrates an on-device seizure detection model:
-
-- **Model Type**: Convolutional Neural Network (CNN) or CNN + LSTM
-- **Input Features**: Accelerometer and gyroscope sequences in fixed windows
-- **Output**: Binary classification (Seizure or Non-seizure)
-- **Deployment**: TensorFlow Lite model integrated in the app for low-latency inference
-
-The model is trained offline using labeled motion data and updated as part of app upgrades.
-
----
-
-## Emergency Workflow
-
-1. Seizure-like activity is detected.
-2. An alert is triggered within the app.
-3. Current location is captured.
-4. Alert and location are sent to the doctor’s dashboard.
-5. Doctor receives real-time notification and patient status.
-
----
-
-## Doctor Dashboard
-
-Data is passed from the App to the hospital or doctor's dashboard via firebase on a web-based platform built with React and Firebase. Doctors can:
-
-- View assigned patient profiles and motion history
-- Receive real-time alerts when a seizure is detected
-- View patient location on seizure events
-- Chat with patients in need
-- Manage accounts and monitor patient compliance
-
-Each doctor receives a unique login ID and patients are automatically linked upon account creation.
-
----
-
-
-Built with ❤️ using React + Vite
+## Author:
+- Isaiah Essien

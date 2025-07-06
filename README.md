@@ -11,6 +11,16 @@ A comprehensive healthcare dashboard application built with React and Vite for m
 - [Link to repo](https://github.com/Isaiah-Essien/uboho_web_dashboard)
 - [Final Deployed Link](https://lighthearted-tapioca-426dd6.netlify.app/)
 
+
+## How the Dashoard works:
+
+1. A medical Orginzation(hospital/clinic) purchases the system
+2. An admin is created
+3. The admin Logs in and adds other doctors and patients
+![Doctor's dashabord](src/assets/screenshots/add_new_doc.png)
+4. The new doctors create passwords, logs in and add patients
+![Doctor's dashabord](src/assets/screenshots/add_new_patient.png)
+
 ## Screenshots & Demos
 
 ### Dashaboard
@@ -23,9 +33,11 @@ A comprehensive healthcare dashboard application built with React and Vite for m
 ### Patient–Doctor Chat
 ![Chat Interface](src/assets/screenshots/chat.png)
 
-###
+### All Patients
 ![Patients](src/assets/screenshots/all_patients.png)
 
+### Sample of Doctor Invitation
+![Doctor's dashabord](src/assets/screenshots/new_doctor_email.png)
 ---
 
 

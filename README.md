@@ -31,7 +31,7 @@ A comprehensive healthcare dashboard application built with React and Vite for m
 ![Location Screenshot](src/assets/screenshots/track_location.png)
 
 ### Patient–Doctor Chat
-![Chat Interface](src/assets/screenshots/chat.png)
+![Chat Interface](src/assets/screenshots/messaging.png)
 
 ### All Patients
 ![Patients](src/assets/screenshots/all_patients.png)

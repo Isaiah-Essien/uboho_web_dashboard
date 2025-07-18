@@ -89,7 +89,7 @@ export default function Login() {
             {formattedDate} · {formattedTime} CAT
           </p>
 
-          <h2>Good morning, Doc!</h2>
+          <h2>Hello, Doc!</h2>
           <p className="subheading">
             Let's get you back to monitoring safely and staying in control—your health journey continues here.
           </p>

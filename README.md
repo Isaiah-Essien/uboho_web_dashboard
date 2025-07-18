@@ -9,9 +9,10 @@ A comprehensive healthcare dashboard application built with React and Vite for m
 - [Demovideo](https://drive.google.com/file/d/1XLzOHM6Bv0CMiRLJ8UZinhGnnOnriDTX/view?usp=sharing)
 - [Figma design](https://www.figma.com/design/EjFiGZ5k5acmHJRQBd7kbL/Uboho?node-id=27-572&t=KELwLbz414nI3asK-1)
 - [Link to repo](https://github.com/Isaiah-Essien/uboho_web_dashboard)
-- [Final Deployed Link](https://lighthearted-tapioca-426dd6.netlify.app/)
+- [Link to Deployed web Dashboard](https://quiet-elf-a156b4.netlify.app)
 - [Link to Mobile_app repo](https://github.com/Isaiah-Essien/uboho_mobile)
 - [Link to result Analysis](https://docs.google.com/document/d/1VcpaDektwOJMmtjM2LOTRAUTh_5AqvCrXtK0OyX-ykY/edit?usp=sharing)
+- [APK file](https://drive.google.com/file/d/1CyZJVzHAs78LU5fboUboxDmElVrKxkoc/view?usp=sharing)
 
 
 ## How the Dashoard works:

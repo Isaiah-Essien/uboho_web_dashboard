@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, query, orderBy, onSnapshot, doc, setDoc, getDoc, serverTimestamp, updateDoc, increment } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, doc, setDoc, getDoc, serverTimestamp, updateDoc, increment, getDocs, where } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { useAuth } from '../../contexts/AuthContext';
 import { useHospital } from '../../contexts/HospitalContext';
@@ -58,7 +58,7 @@ const ChatConversation = ({ user, onClose }) => {
     return colors[index];
   };
 
-  // Create or get conversation ID
+  // Create or get conversation ID (now uses Firestore auto-ID for new conversations)
   const getOrCreateConversation = async () => {
     if (!currentUser || !currentHospital || !user) {
       console.log('Missing required data for conversation creation');
@@ -72,90 +72,81 @@ const ChatConversation = ({ user, onClose }) => {
     }
 
     try {
-      // Create a consistent conversation ID based on participant IDs
-      const participants = [currentUser.uid, otherUserId].sort();
-      const conversationId = participants.join('_');
-      
-      console.log('Getting/creating conversation:', conversationId);
-      console.log('Participants:', participants);
-
-      const conversationRef = doc(db, 'hospitals', currentHospital.id, 'conversations', conversationId);
-      const conversationDoc = await getDoc(conversationRef);
-
-      if (!conversationDoc.exists()) {
-        // Create new conversation - don't set lastMessage and lastMessageTime until first message
-        await setDoc(conversationRef, {
-          participants: participants,
-          createdAt: serverTimestamp(),
-          unreadCount: {
-            [currentUser.uid]: 0,
-            [otherUserId]: 0
-          }
-        });
-        console.log('Created new conversation:', conversationId);
-      } else {
-        console.log('Found existing conversation:', conversationId);
+      // Query for existing conversation with these participants
+      const participants = [currentUser.uid, otherUserId];
+      const conversationsRef = collection(db, 'hospitals', currentHospital.id, 'conversations');
+      // Get all conversations where current user is a participant
+      const q = query(conversationsRef, where('participants', 'array-contains', currentUser.uid));
+      const convsSnapshot = await getDocs(q);
+      let foundConvId = null;
+      convsSnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        // Check for exact match (both users, length 2, order doesn't matter)
+        if (Array.isArray(data.participants) &&
+            data.participants.length === 2 &&
+            data.participants.includes(currentUser.uid) &&
+            data.participants.includes(otherUserId)) {
+          foundConvId = docSnap.id;
+        }
+      });
+      if (foundConvId) {
+        console.log('Found existing conversation:', foundConvId);
+        return foundConvId;
       }
-
-      return conversationId;
+      // No conversation found, return null (do not create here)
+      return null;
     } catch (error) {
-      console.error('Error creating/getting conversation:', error);
+      console.error('Error getting conversation:', error);
       return null;
     }
   };
 
-  // Load messages for the conversation
+  // Find existing conversationId (do not create) when user/context changes
   useEffect(() => {
     if (!currentUser || !currentHospital || !user) {
-      console.log('Missing required data, skipping message load');
+      setConversationId(null);
+      setMessages([]);
       setMessagesLoading(false);
       return;
     }
-
-    let unsubscribeFromMessages = () => {};
-
-    const setupConversation = async () => {
+    const findConversation = async () => {
       setMessagesLoading(true);
-      
       const convId = await getOrCreateConversation();
-      if (!convId) {
-        console.log('Failed to get/create conversation');
-        setMessagesLoading(false);
-        return;
-      }
-
       setConversationId(convId);
-
-      const messagesRef = collection(db, 'hospitals', currentHospital.id, 'conversations', convId, 'messages');
-      const messagesQuery = query(messagesRef, orderBy('timestamp', 'asc'));
-
-      unsubscribeFromMessages = onSnapshot(
-        messagesQuery,
-        (snapshot) => {
-          const messagesList = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-            timestamp: doc.data().timestamp?.toDate?.() || new Date()
-          }));
-          
-          setMessages(messagesList);
-          setMessagesLoading(false);
-
-          markMessagesAsRead(convId);
-        },
-        (error) => {
-          console.error('Error loading messages:', error);
-          setMessagesLoading(false);
-        }
-      );
+      setMessagesLoading(false);
     };
-
-    setupConversation();
-
-    return () => {
-      unsubscribeFromMessages();
-    };
+    findConversation();
   }, [currentUser, currentHospital, user]);
+
+  // Subscribe to messages for the current conversationId
+  useEffect(() => {
+    if (!conversationId || !currentUser || !currentHospital) {
+      setMessages([]);
+      setMessagesLoading(false);
+      return;
+    }
+    setMessagesLoading(true);
+    const messagesRef = collection(db, 'hospitals', currentHospital.id, 'conversations', conversationId, 'messages');
+    const messagesQuery = query(messagesRef, orderBy('timestamp', 'asc'));
+    const unsubscribe = onSnapshot(
+      messagesQuery,
+      (snapshot) => {
+        const messagesList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          timestamp: doc.data().timestamp?.toDate?.() || new Date()
+        }));
+        setMessages(messagesList);
+        setMessagesLoading(false);
+        markMessagesAsRead(conversationId);
+      },
+      (error) => {
+        console.error('Error loading messages:', error);
+        setMessagesLoading(false);
+      }
+    );
+    return () => unsubscribe();
+  }, [conversationId, currentUser, currentHospital]);
 
   // Mark messages as read
   const markMessagesAsRead = async (convId) => {
@@ -173,16 +164,36 @@ const ChatConversation = ({ user, onClose }) => {
 
   // Send a new message
   const handleSendMessage = async () => {
-    if (message.trim() === '' || !conversationId || sendingMessage) return;
-    
+    if (message.trim() === '' || sendingMessage) return;
+
     setSendingMessage(true);
     const messageText = message.trim();
 
     try {
-      console.log('Sending message:', messageText);
-      
+      let convId = conversationId;
+      let isNewConversation = false;
+      const otherUserId = user.authId || user.userId || user.id;
+
+      // If no conversation exists, create it now
+      if (!convId) {
+        const participants = [currentUser.uid, otherUserId];
+        const conversationsRef = collection(db, 'hospitals', currentHospital.id, 'conversations');
+        const newConvRef = await addDoc(conversationsRef, {
+          participants,
+          createdAt: serverTimestamp(),
+          unreadCount: {
+            [currentUser.uid]: 0,
+            [otherUserId]: 0
+          }
+        });
+        convId = newConvRef.id;
+        setConversationId(convId); // This will trigger the subscription effect
+        isNewConversation = true;
+        console.log('Created new conversation with auto-ID (on send):', convId);
+      }
+
       // Add message to messages subcollection
-      const messagesRef = collection(db, 'hospitals', currentHospital.id, 'conversations', conversationId, 'messages');
+      const messagesRef = collection(db, 'hospitals', currentHospital.id, 'conversations', convId, 'messages');
       await addDoc(messagesRef, {
         text: messageText,
         senderId: currentUser.uid,
@@ -192,9 +203,7 @@ const ChatConversation = ({ user, onClose }) => {
       });
 
       // Update conversation metadata
-      const conversationRef = doc(db, 'hospitals', currentHospital.id, 'conversations', conversationId);
-      const otherUserId = user.authId || user.userId || user.id;
-      
+      const conversationRef = doc(db, 'hospitals', currentHospital.id, 'conversations', convId);
       await updateDoc(conversationRef, {
         lastMessage: messageText,
         lastMessageTime: serverTimestamp(),
@@ -202,7 +211,7 @@ const ChatConversation = ({ user, onClose }) => {
       });
 
       console.log('Message sent successfully');
-      
+
       // Reset textarea height
       if (textareaRef.current) {
         textareaRef.current.style.height = '24px';

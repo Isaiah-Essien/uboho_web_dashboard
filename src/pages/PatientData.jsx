@@ -521,7 +521,7 @@ const PatientData = () => {
 
   const handleAction = (action, patientId) => {
     if (action === 'Send Message') {
-      navigate(`/send-message/${patientId}`);
+      navigate(`/messages/chat/${patientId}`);
     } else if (action === 'Emergency Contact') {
       alert(`Emergency Contact: ${patient?.emergencyContact || 'No emergency contact available'}`);
     }
